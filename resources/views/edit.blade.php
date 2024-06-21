@@ -11,7 +11,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
-              <li class="breadcrumb-item active">Tambah User</li>
+              <li class="breadcrumb-item active">Edit User</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -20,15 +20,16 @@
     <!-- /.content-header -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.user.update',['id' => $data->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                <div class="row">
             <!-- left column -->
             <div class="col-md-6">
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Form Tambah User</h3>
+                  <h3 class="card-title">Form Edit User</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -36,21 +37,21 @@
                   <div class="card-body">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Email</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Masukkan Email">
+                      <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="{{ $data->email }}" placeholder="Masukkan Email">
                       @error('email')
                           <small>{{ $message }}</small>
                       @enderror                     
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Nama</label>
-                        <input type="text" name="nama" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nama">
+                        <input type="text" name="nama" class="form-control" id="exampleInputEmail1" value="{{ $data->name }}" placeholder="Masukkan Nama">
                         @error('nama')
                             <small>{{ $message }}</small>
                         @enderror
                       </div>
                       <div class="form-group">
                         <label for="exampleInputUsername">Username</label>
-                        <input type="text" name="username" class="form-control" id="exampleInputUsername" placeholder="Masukkan Username">
+                        <input type="text" name="username" class="form-control" id="exampleInputUsername" value="{{ $data->name }}" placeholder="Masukkan Username">
                         @error('username')
                             <small>{{ $message }}</small>
                         @enderror
@@ -65,6 +66,11 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Foto Profil</label>
                       <input type="file" class="form-control" id="exampleInputPhoto" name="photo">
+                      @if(empty($data->image))
+                      <td><span class="badge badge-pill badge-danger">User Belum upload Foto</td>
+                      @else
+                      <td><img src="{{ asset('storage/photo-user/'.$data->image) }}" width="100"></td>
+                      @endif
                       @error('email')
                           <small>{{ $message }}</small>
                       @enderror                     
