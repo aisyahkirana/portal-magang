@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>Otak Kanan | Portal Magang Mahasiswa</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -22,6 +22,8 @@
       <a href="{{ route('login') }}" class="h1 text-warning"><b>Portal</b> Magang</a>
     </div>
     <div class="card-body">
+ 
+      
       <p class="login-box-msg">Silahkan isi Email dan Password untuk Login</p>
 
       <form action="{{ route('loginproses') }}" method="post">
