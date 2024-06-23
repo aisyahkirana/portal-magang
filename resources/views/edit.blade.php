@@ -25,7 +25,7 @@
                 @method('PUT')
                <div class="row">
             <!-- left column -->
-            <div class="col-md-6">
+            <div class="col-lg-12 col-12">
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -78,7 +78,7 @@
                   </div>
                   <!-- /.card-body -->
   
-                  <div class="card-footer">
+                  <div class="card-footer text-right">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
               </div>

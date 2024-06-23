@@ -5,14 +5,19 @@ Use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Spatie\Permission\Traits\HasRoles;
 use Hash;
 
 class HomeController extends Controller
 {
-
-    public function dashboard(){
-        return view('dashboard');
+    public static function middleware(): array
+    {
+        return [
+            'role_or_permission:admin'
+        ];
     }
+   
 
     public function index(){
         $data = User::get();
@@ -21,6 +26,42 @@ class HomeController extends Controller
 
     public function create(){
         return view('create');
+    }
+
+    public function pengajuan(){
+        return view('pengajuan');
+    }
+
+    public function pengajuansubmit(Request $request){
+        
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email',
+            'nama' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'photo'    => 'mimes:png,jpg,jpeg|max:4196'
+        ]);
+        
+        if($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
+        // dd($request->all());
+        if($request->hasFile('photo')){
+        $photo  = $request->file('photo');
+        $filename = date('Y-m-d').$photo->getClientOriginalName();
+        $path   = 'photo-user/'.$filename;
+        Storage::disk('public')->put($path,file_get_contents($photo));
+        } else {
+        $filename = NULL;
+        }
+       
+        $data['email'] = $request->email;
+        $data['name'] = $request->nama;
+        $data['username'] = $request->username;
+        $data['password'] = Hash::make($request->password);
+        $data['image'] = $filename;
+        
+        User::create($data);
+        
+        return redirect()->route('admin.index')->with('success', 'Data Anda Berhasil di Submit');
     }
 
     public function store(Request $request){

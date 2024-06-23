@@ -10,8 +10,8 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ url('/')}}">Home</a></li>
-              <li class="breadcrumb-item active">Tambah User</li>
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+            <li class="breadcrumb-item active">Form Tambah User</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -24,7 +24,7 @@
                 @csrf
                <div class="row">
             <!-- left column -->
-            <div class="col-md-6">
+            <div class="col-lg-12 col-12">
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -72,7 +72,7 @@
                   </div>
                   <!-- /.card-body -->
   
-                  <div class="card-footer">
+                  <div class="card-footer text-right">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
               </div>

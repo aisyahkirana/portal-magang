@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 Use Auth;
 use Hash;
 Use App\Models\User;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Spatie\Permission\Traits\HasRoles;
+use View;
 
 class LoginController extends Controller
 {
@@ -14,7 +17,16 @@ class LoginController extends Controller
         return view('login');
     }
 
+    public function adminlogin(){
+        return view('adminlogin');
+    }
+
+    public function dashboard(){
+        return view('dashboard');
+    }
+
     public function login_proses(Request $request){
+        
         $request->validate([
             'email'     => 'required',
             'password'  => 'required',
@@ -26,11 +38,16 @@ class LoginController extends Controller
         ];
 
         if(Auth::attempt($data)){
-            return redirect()->route('admin.index');
+            if(Auth::user()->roles->pluck('mahasiswa')){
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('admin.index');
+            }
         }else{
             return redirect()->route('login')->with('failed','Email atau Password Salah');
         }
     }
+
 
     public function logout(){
         Auth::logout();
@@ -62,7 +79,7 @@ class LoginController extends Controller
      ];
 
     if(Auth::attempt($data)){
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.dashboard');
     }
 
     }
