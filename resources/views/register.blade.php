@@ -23,53 +23,65 @@
         <div class="card card-outline card-warning">
             <div class="card-header text-center">
                 <a href="#" class="h1 text-warning"><b>Portal</b> Magang</a>
-              </div>
+            </div>
             <div class="card-body">
                 <p class="login-box-msg">Silahkan mendaftarkan diri Anda</p>
                 <form action="{{ route('registerproses') }}" method="POST">
                     @csrf
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                        placeholder="Masukkan Email">
-                    @error('email')
-                    <small>{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Nama</label>
-                    <input type="text" name="nama" class="form-control" id="exampleInputEmail1"
-                        placeholder="Masukkan Nama">
-                    @error('nama')
-                    <small>{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputUsername">Username</label>
-                    <input type="text" name="username" class="form-control" id="exampleInputUsername"
-                        placeholder="Masukkan Username">
-                    @error('username')
-                    <small>{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
-                        placeholder="Password">
-                    @error('password')
-                    <small>{{ $message }}</small>
-                    @enderror
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" name="email"
+                            placeholder="Masukkan Email">
+                        @error('email')
+                        <small>{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nama</label>
+                        <input type="text" name="nama" class="form-control" id="exampleInputEmail1"
+                            placeholder="Masukkan Nama">
+                        @error('nama')
+                        <small>{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputUsername">Username</label>
+                        <input type="text" name="username" class="form-control" id="exampleInputUsername"
+                            placeholder="Masukkan Username">
+                        @error('username')
+                        <small>{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                            placeholder="Password">
+                        @error('password')
+                        <small>{{ $message }}</small>
+                        @enderror
 
-                </div>
-                <!-- /.social-auth-links -->
+                    </div>
 
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-block btn-primary">Submit</button>
-                </div>
+                    <label for="exampleInputPassword1">Daftar Sebagai</label>
+                    <div class="form-group">
+                        <select class="form-control" name="roles[]">
+                            @foreach ($roles as $role)
+                                <option value="{{ $role }}">{{ $role }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <p class="mb-0 mt-3">
-                    <a href="{{ route('login')}}" class="text-center">Sudah Punya Akun? Klik untuk Login</a>
-                </p>
+
+
+                    <!-- /.social-auth-links -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                    </div>
+
+                    <p class="mb-0 mt-3">
+                        <a href="{{ route('login')}}" class="text-center">Sudah Punya Akun? Klik untuk Login</a>
+                    </p>
                 </form>
             </div>
             <!-- /.card-body -->

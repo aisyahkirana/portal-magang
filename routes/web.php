@@ -22,6 +22,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','role:admin'], 'as' =>
     Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('user.edit');
     Route::put('/update/{id}', [HomeController::class, 'update'])->name('user.update');
     Route::post('/delete', [HomeController::class, 'delete'])->name('user.delete');
+    Route::post('/approvalproses', [HomeController::class, 'approvalproses'])->name('user.approvalproses');
 });
 
 

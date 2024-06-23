@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-Use Auth;
+use Auth;
+use DB;
 use Hash;
-Use App\Models\User;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
+use App\Models\Magang;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Spatie\Permission\Traits\HasRoles;
 use View;
@@ -13,74 +16,103 @@ use View;
 class LoginController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
         return view('login');
     }
 
-    public function adminlogin(){
+    public function adminlogin()
+    {
         return view('adminlogin');
     }
 
-    public function dashboard(){
-        return view('dashboard');
+    public function dashboard()
+    {
+        DB::connection()->enableQueryLog();
+        $datadashboard = Magang::where('user_id', '=', Auth::user()->id)->get();
+        $dataMagang = Magang::where('status', '=', 'Approve')->count();
+
+        $jumlah = Magang::count();
+        // dd($jumlah);
+        // DB::connection()->enableQueryLog();
+        // $queries = DB::getQueryLog();
+
+        // dd($queries);
+
+        return view('dashboard', compact('datadashboard','jumlah','dataMagang'));
     }
 
-    public function login_proses(Request $request){
-        
+    public function login_proses(Request $request)
+    {
+
         $request->validate([
-            'email'     => 'required',
-            'password'  => 'required',
+            'email' => 'required',
+            'password' => 'required',
         ]);
 
         $data = [
-            'email'     => $request->email,
-            'password'  => $request->password,
+            'email' => $request->email,
+            'password' => $request->password,
         ];
 
-        if(Auth::attempt($data)){
-            if(Auth::user()->roles->pluck('mahasiswa')){
+        if (Auth::attempt($data)) {
+            if (Auth::user()->roles->pluck('mahasiswa')) {
                 return redirect()->route('dashboard');
             } else {
                 return redirect()->route('admin.index');
             }
-        }else{
-            return redirect()->route('login')->with('failed','Email atau Password Salah');
+        } else {
+            return redirect()->route('login')->with('failed', 'Email atau Password Salah');
         }
     }
 
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
-        return redirect()->route('login')->with('success','Anda berhasil Logout');
+        return redirect()->route('login')->with('success', 'Anda berhasil Logout');
     }
-    public function register(){
-        return view('register');
+    public function register()
+    {
+        $roles = Role::pluck('name','name')->all();
+        return view('register',compact('roles'));
     }
 
-    public function register_proses(Request $request){
-       $request->validate([
-        'nama' => 'required',
-        'email' => 'required|email|unique:users,email',
-        'username' => 'required',
-        'password' => 'required'
-       ]);
+    public function register_proses(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required',
+            'password' => 'required',
+            'roles' => 'required'
+        ]);
+     
+        $data['email'] = $request->email;
+        $data['name'] = $request->nama;
+        $data['username'] = $request->username;
+        $data['password'] = Hash::make($request->password);
 
-       $data['email'] = $request->email;
-       $data['name'] = $request->nama;
-       $data['username'] = $request->username;
-       $data['password'] = Hash::make($request->password);
+        
+        $user = User::create($data);
+        $user->assignRole($request->input('roles'));
 
-       User::create($data);
-       //submit data to database
+        //submit data to database
 
-       $data = [
-        'email'     => $request->email,
-        'password'  => $request->password,
-     ];
+        $data = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
 
-    if(Auth::attempt($data)){
-        return redirect()->route('admin.dashboard');
-    }
+        if (Auth::attempt($data)) {
+            if (Auth::user()->roles->pluck('mahasiswa')) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('admin.index');
+            }
+        } else {
+            return redirect()->route('login')->with('failed', 'Email atau Password Salah');
+        }
 
     }
 }

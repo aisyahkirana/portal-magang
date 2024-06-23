@@ -49,6 +49,7 @@ class PermissionSeeder extends Seeder
         $user = User::find(33);
 
         $user->assignRole('mahasiswa');
+        
 
     }
 }
