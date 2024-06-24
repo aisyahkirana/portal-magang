@@ -13,6 +13,7 @@ Route::post('/pengajuansubmit', [HomeController::class, 'pengajuansubmit'])->nam
 Route::get('/register', [LoginController::class,'register'])->name('register');
 Route::post('/register-proses', [LoginController::class,'register_proses'])->name('registerproses');
 Route::get('/dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
+Route::get('/generate-pdf', [HomeController::class, 'generatePDF'])->name('generate-pdf');
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','role:admin'], 'as' => 'admin.'], function(){
     Route::get('/user', [HomeController::class, 'index'])->name('index');
@@ -23,6 +24,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','role:admin'], 'as' =>
     Route::put('/update/{id}', [HomeController::class, 'update'])->name('user.update');
     Route::post('/delete', [HomeController::class, 'delete'])->name('user.delete');
     Route::post('/approvalproses', [HomeController::class, 'approvalproses'])->name('user.approvalproses');
+    Route::post('/notapprovalproses', [HomeController::class, 'notapprovalproses'])->name('user.notapprovalproses');
 });
 
 

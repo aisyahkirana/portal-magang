@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Auth;
 use App\Models\Magang;
 use Illuminate\Http\Request;
 use DB;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Spatie\Permission\Traits\HasRoles;
 use Hash;
+use PDF;
 
 class HomeController extends Controller
 {
@@ -173,9 +175,35 @@ class HomeController extends Controller
     public function approvalproses(Request $request)
     {
 
-        DB::connection()->enableQueryLog();
+        // DB::connection()->enableQueryLog();
         $data = Magang::where('id', $request->user_id)->update(array('status' => 'Approve'));
 
         return redirect()->route('admin.approval')->with('success', 'Data User Ini Berhasil di Setujui');
+    }
+
+    public function notapprovalproses(Request $request)
+    {
+        // dd($request);
+
+        // DB::connection()->enableQueryLog();
+        $data = Magang::where('id', $request->user_id2)->update(array('status' => 'TidakApprove'));
+
+        return redirect()->route('admin.approval')->with('danger', 'Data User Ini Berhasil di Tolak');
+    }
+
+    public function generatePDF()
+    {
+        $users = Magang::where('user_id', '=', Auth::user()->id)->get();
+    
+        $data = [
+            'name' => 'Approval Magang',
+            'title' => 'Approval Magang',
+            'date' => date('dd/mm/Y'),
+            'users' => $users
+        ]; 
+ 
+        $pdf = PDF::loadView('pdf.document', $data);
+       
+        return $pdf->stream('Dokumen Approval Magang Otak Kanan - '.$users[0]->nama.'.pdf');
     }
 }

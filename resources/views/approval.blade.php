@@ -29,6 +29,36 @@
 </div>
 <!-- /.modal -->
 
+<div class="modal fade" id="deleteModal2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form action="{{ url('admin/notapprovalproses') }}" method="POST">
+      @csrf
+      <div class="modal-header">
+        <h4 class="modal-title">Konfirmasi Persetujuan</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="user_id2" id="delete_user_id2">
+        <p>Apakah anda yakin ingin menolak pengajuan dari data user ini?</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+       
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Ya, Tolak</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </form>
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
@@ -58,6 +88,12 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <h5><i class="icon fas fa-check"></i> Informasi</h5>
             <strong>{!! \Session::get('success') !!}</strong>
+          </div>
+          @elseif (\Session::has('danger'))
+          <div class="alert alert-success alert-dismissible col-md-4 col-md-offset-4">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Informasi</h5>
+            <strong>{!! \Session::get('danger') !!}</strong>
           </div>
           @endif
           <div class="card">
@@ -99,7 +135,11 @@
                         <td>{{ $d->mulai_magang }}</td>
                         <td>{{ $d->selesai_magang }}</td>
                         @if($d->status == 'notApprove')
-                        <td> <button type="button" value="{{ $d->id }}" class="btn btn-warning deleteCategoryBtn"><i class="fas fa-check"></i> Setuju</button></td>
+                        <td> <button type="button" value="{{ $d->id }}" class="btn btn-warning deleteCategoryBtn"><i class="fas fa-check"></i> Setuju</button>
+                          <button type="button" value="{{ $d->id }}" class="btn btn-danger deleteCategoryBtn2"><i class="fas fa-times"></i> Tidak Setuju</button>
+                        </td>
+                        @elseif ($d->status == 'TidakApprove')
+                        <td><span class="badge badge-pill badge-danger">Pengajuan User ini telah di Tolak</td>
                         @else
                         <td><span class="badge badge-pill badge-success">Pengajuan User ini Telah Disetujui</td>
                         @endif
@@ -128,6 +168,19 @@
       var user_id = $(this).val();
       $('#delete_user_id').val(user_id);
       $('#deleteModal').modal('show');
+    });
+  });
+
+</script>
+
+<script>
+  $(document).ready(function (){
+    $(document).on('click','.deleteCategoryBtn2',function (e) 
+    {
+      e.preventDefault();
+      var user_id2 = $(this).val();
+      $('#delete_user_id2').val(user_id2);
+      $('#deleteModal2').modal('show');
     });
   });
 
